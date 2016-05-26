@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+product_images_1,product.images1,model_product_images,base.group_sale_manager,1,1,1,1
+product_images_2,product.images2,model_product_images,base.group_sale_salesman,1,1,0,0
+access_website_customer_comment,access_website_customer_comment,model_website_customer_comment,base.group_website_designer,1,1,1,1

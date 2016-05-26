@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_website_blog_post_fawheels" model="ir.ui.view">
+        <field name="name">Website Blog post fawheels</field>
+        <field name="model">blog.post</field>
+        <field name="inherit_id" ref="website_blog.view_blog_post_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[3]" position="after">
+                <group name="blog_post_image">
+                    <field name="post_image"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

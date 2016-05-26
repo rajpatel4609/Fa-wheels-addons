@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="wheels_inherited_res_partner">
+        <field name="name">res.partner.wheels</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//label[@for='street']" position="before">
+                <label for="postcode" string="Enter Postcode"/>
+                <div class="o_address_format">
+                    <field name="postcode" placeholder="Postcode to search..." style="text-transform: uppercase;"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='street']" position="before">
+                <field name="house_number" placeholder="House Number"/>
+            </xpath>
+
+            <xpath expr="//field[@name='zip']" position="attributes">
+                <attribute name="placeholder">Postcode</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="placeholder">County</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='city']" position="replace"/>
+            <xpath expr="//field[@name='street2']" position="after">
+                <field name="city" placeholder="City..."/>
+            </xpath>
+            <xpath expr="//field[@name='function']" position="before">
+                <field name="customer_type" attrs="{'invisible': [('supplier','=', True),('customer','=', False)]}"/>
+                <field name="classification" attrs="{'invisible': [('customer_type','!=','b2b')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='title']" position="replace"/>
+            <xpath expr="//field[@name='parent_id']" position="before">
+                <field name="title" placeholder="Title"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="visiblity">1</attribute>
+            </xpath>
+        </data>
+        </field>
+    </record>
+    </data>
+</openerp>

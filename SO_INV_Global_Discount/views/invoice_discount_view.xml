@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		
+	<record id="invoice_discount111" model="ir.ui.view">
+        <field name="name">invoice_discount.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='discount']" position="before">
+                <field name="dicount_type" groups="sale.group_discount_per_so_line"/>
+            </xpath>
+            
+        </field>
+        </record>
+    <record id="sb_account_invoice_form_inherit" model="ir.ui.view">
+        <field name="name">invoice_discount.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="sb_wheels.sb_account_invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/group/group/field[@name='discount']" position="before">
+                <field name="dicount_type" groups="sale.group_discount_per_so_line"/>
+            </xpath>
+            
+        </field>
+    </record>
+	</data>
+</openerp>
+
+
+

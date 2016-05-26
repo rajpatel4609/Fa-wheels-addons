@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="sb_claim_form_change">
+        <field name="name">crm.claim.form.sb</field>
+        <field name="model">crm.claim</field>
+        <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Assign To</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">Post Sales Claims</attribute>
+            </xpath>
+            
+            <xpath expr="//group/notebook/page/group/separator" position="replace"/>
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <separator colspan="2" string="Customer Contact"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='user_fault']" position="attributes">
+                <attribute name="string">Claim Title</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='categ_id']" position="attributes">
+                <attribute name="string">Claim</attribute>
+            </xpath>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Return Items">
+                    <field name="return_items_ids"/>
+                </page>
+            </xpath>
+            <xpath expr="//header/field[@name='stage_id']" position="before">
+               <button name="btn_return_items" type="object" string="Return Items"/>
+            </xpath>
+        </data>
+        </field>
+    </record>
+    
+    <record id="return_items_tree_view" model="ir.ui.view">
+            <field name="name">return.items.tree</field>
+            <field name="model">return.items</field>
+            <field name="arch" type="xml">
+                <tree string="Return Items" editable="1">
+                    <field name="product_id" domain="[('type','!=','service')]"/>
+                    <field name="wheel_type"/>
+                    <field name="quantity"/>
+                    <field name="reason"/>
+                    <field name="datetime"/>
+                    <field name="return_kind"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="status" readonly="1"/>
+                    <field name="claim_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="return_items_action" model="ir.actions.act_window">
+            <field name="name">Return Items</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">return.items</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="return_items_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+
+    <!-- <menuitem id="return_items_menuitem" name="Return Items" parent="base.menu_aftersale" action="return_items_action" sequence="1"/>  -->
+    
+    </data>
+</openerp>

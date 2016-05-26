@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+	<template priority="26" id="invoice_discount_report_new" inherit_id="sb_wheels.report_invoice_fa">
+ 		<xpath expr="//table/thead/tr/th[4]" position="before">
+            <th t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">Discount Type</th>
+        </xpath>
+        <xpath expr="//table/tbody/tr/td[4]" position="before">
+            <td t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">
+            <span t-field="l.dicount_type"/>
+            </td>
+        </xpath>
+	</template>
+	</data>
+</openerp>
+
+

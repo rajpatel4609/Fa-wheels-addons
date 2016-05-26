@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="wheels_inherited_product_product">
+        <field name="name">product.product.wheels</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//header" position="inside">
+                <button name="sub_product" string="Sub Product" type="object" />
+            </xpath>
+            <xpath expr="//field[@name='default_code']" position="replace"/>
+
+            <xpath expr="//notebook[last()]" position="inside">
+              <page string="Description">
+                <field name="description" widget="html"/>
+              </page>
+            </xpath>
+
+            <xpath expr="//field[@name='purchase_ok']" position="before">
+                <field name="exchange_stock" nolabel="1"/><span><b>Exchange Stock</b></span><br/>
+                <field name="donor_wheels"  nolabel="1"/><span><b>Donor Wheels</b></span><br/>
+                <field name="service" nolabel="1" /><span><b>Direct Sales</b></span><br/>
+                <field name="is_unfinish" nolabel="1" /><span><b>Is Unfinished</b></span><br/>
+            </xpath>
+            <xpath expr="//notebook" position="before">
+                <group col="4" colspan="8">
+                    <field name="sb_type"/>
+                    <field name="service_sale_type" attrs="{'invisible':[('sb_type','!=', 'services')]}"/>
+                    <field name="default_code"/>
+                    <field name="make_id" widget="selection"/>
+                    <field name="value" attrs="{'invisible':[('sb_type','==', 'services')]}"/>
+                    <field name="model_id"  domain="[('brand_id', '=', make_id)]" context="{'default_brand_id': make_id}" widget="selection"/>
+                    <field name="profit" attrs="{'invisible':[('sb_type','==', 'services')]}"/>
+                    <field name="size_id" widget="selection"/>
+                    <field name="availability" attrs="{'invisible':[('sb_type','==', 'services')]}"/>
+                    <field name="style_id" domain="[('model_id','=',model_id)]" context="{'default_model_id': model_id}"/>
+                    <field name="process"    context="{'default_model_id': model_id}" />
+                    <field name="type_id"  context="{'default_model_id': model_id}"/>
+                    <field name="wheel_model"/>
+                    <field name="move"  />
+                </group>
+            </xpath>
+            
+            <xpath expr="//notebook/page/group/group[@name='group_general']" position="before">
+                <separator string="Sale Prices" attrs="{'invisible':[('sb_type', '!=', 'tyre'),('sb_type', '!=', 'wheel')]}"/>
+                <group col="6" colspan="5" attrs="{'invisible':[('sb_type', '!=', 'tyre'),('sb_type', '!=', 'wheel')]}">
+                    <span/>
+                    <span><b>1 Unit</b></span>
+                    <span><b>Pair</b></span>
+                    <span><b>4 Set</b></span>
+                    <span><b>5 Set</b></span><span/>
+                    
+                    <field name="sale_front_1unit" string="Sale Price Front" />
+                    <field name="sale_front_pair" nolabel="1" />
+                    <field name="sale_front_set4"  nolabel="1"/>
+                    <field name="sale_front_set5"  nolabel="1"/>
+
+                    <span/><field name="sale_back_1unit"  string="Sales Price Back" />
+                    <field name="sale_back_pair" nolabel="1" />
+                    <span></span>
+                    <span></span>
+                 </group>
+                 <separator string="Exchange Prices" attrs="{'invisible':[('exchange_stock','=',False)],}"/>
+                 <group col="6" colspan="5" attrs="{'invisible':[('exchange_stock','=',False)],}">
+                    
+                    <span/>
+                    <span><b>1 Unit</b></span>
+                    <span><b>Pair</b></span>
+                    <span><b>4 Set</b></span>
+                    <span><b>5 Set</b></span><span/>
+                    <field name="exchange_front_1unit" string="Exchange Price Front"/>
+                    <field name="exchange_front_pair" nolabel="1" />
+                    <field name="exchange_front_set4"  nolabel="1" />
+                    <field name="exchange_front_set5"  nolabel="1" />
+
+                    <span/><field name="exchange_back_1unit"  string="Exchange Price Back" />
+                    <field name="exchange_back_pair"  nolabel="1" />
+                    <span></span>
+                    <span></span>
+                </group>
+                <div class="oe_horizontal_separator oe_clear" attrs="{'invisible':[('exchange_stock','=',False),('service','=',False)],}">Attributes</div>
+                <group col="4" colspan="4">
+                    <field name="wheel_width"/>
+                    <field name="wheel_height"/>
+                    <field name="wheel_speed"/>
+                    <field name="wheel_diameter"/>
+                    <field name="wheel_offset"/>
+                    <field name="wheel_pcd"/>
+                    <field name="wheel_color"/>
+                    <field name="wheel_finish"/>
+                </group>
+                <!-- Services Products-->
+                
+                <group attrs="{'invisible':['|',('sb_type','!=', 'services'),('service_sale_type','!=', 'refurbish')],}">
+                    <field name="package_id"/>
+                </group>
+            </xpath>
+            <xpath expr="//notebook/page[2]" position="after">
+                <page string="Sub Products" attrs="{'invisible': [('sb_type', 'not in', ('wheel','tyre'))]}"> 
+                    <field name="sub_product_line"
+                        attrs="{'invisible': [('sb_type', 'not in', ('wheel','tyre'))]}">
+                        <form string="Sub Products">
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="sub_product_type"/>
+                                </group>
+                                <group>
+                                    <field name="price"/>
+                                    <field name="qty_available"/>
+                                    <field name="unfinish_stock"/>
+                                    <field name="barcode"/>
+                                </group>
+                            </group>
+                        </form>
+                        <tree string="Sub Products"  create="false">
+                            <field name="name"/>
+                            <field name="sub_product_type"/>
+                            <field name="price"/>
+                            <field name="qty_available" readonly="0"/>
+                            <field name="unfinish_stock"/>
+                            <field name="barcode"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </data>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="sb_wheel_products">
+        <field name="name">product.product.sb.wheel</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_search_form_view"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='name']" position="before">
+                 <field name="make_id"/>
+                 <field name="model_id"/>
+                 <field name="sb_type"/>
+                 <field name="service_sale_type"/>
+                 <field name="exchange_stock"/>
+                 <field name="is_unfinish"/>
+                 <field name="service"/>
+                 <filter string="Unfinished" name="is_unfinish" domain="[('is_unfinish','=',1)]"/>
+                 <filter string="Wheels" name="var_wheel_id" domain="[('sb_type','=','wheel')]" />
+                 <filter string="Tyres" name="var_tyre_id" domain="[('sb_type','=','tyre')]" />
+                 <filter string="Services" name="var_services_id" domain="[('sb_type','=','services')]" />
+                 <filter string="Accessories" name="var_accessories_id" domain="[('sb_type','=','accessories')]" />
+                 <filter string="Exchange" name="exchange_stock" domain="[('exchange_stock','=',1)]"/>
+                 <filter string="Donor Wheels" name="donor_wheels" domain="[('donor_wheels','=',1)]"/>
+            </xpath>
+             <xpath expr="//field[@name='pricelist_id']" position="after">
+                <group  expand='0' string='Group by...'>
+                    <filter string="Make" name="make_id" domain="[]" context="{'group_by' : 'make_id'}"/>
+                    <filter string="Model" name="model_id" domain="[]" context="{'group_by' : 'model_id'}"/>
+                    <filter string="Service Type" name="servicetype_id" domain="[]" context="{'group_by' : 'service_sale_type'}"/>
+                    <filter string="Type" name="type_id" domain="[]" context="{'group_by' : 'sb_type'}"/>
+                    <filter string="Size" name="size_id" domain="[]" context="{'group_by' : 'size_id'}"/>
+                    <filter string="Type" name="type_id" domain="[]" context="{'group_by' : 'sb_type'}"/>
+                </group>
+            </xpath>
+            
+        </data>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_form_view_procurement_button_inherits">
+        <field name="name">product.product.sb.wheel</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock.product_open_quants)d']" position="after">
+                <button type="object"
+                    name="unfinished_product"
+                    attrs="{'invisible':[('is_unfinish', '=', False)]}"
+                    class="oe_stat_button" icon="fa-building-o">
+                    <field name="unfinish_stock" widget="statinfo" string="Unfinished Qauntity"/>
+                </button>            
+            </xpath>
+        </field>
+    </record>
+    <record id="sb_product_wheels_action" model="ir.actions.act_window">
+            <field name="name">Wheels</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_var_wheel_id':1, 'default_sb_type': 'wheel', 'default_service': 1, 'default_exchange_stock': 1, 'default_type': 'product'}</field>
+            <!--field name="view_id" ref="sb_product_wheels_tree_view"/-->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    <menuitem id="sb_product_variant" name="Wheels" parent="base.menu_product" action="sb_product_wheels_action" sequence="10"/>
+    
+    <record id="sb_product_wheels_donor_wheels_action" model="ir.actions.act_window">
+            <field name="name">Donor Wheels</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('donor_wheels', '=', True)]</field>
+            <field name="context">{'search_default_donor_wheels':1, 'default_donor_wheels': 1, 'default_type': 'product'}</field>
+            <!--field name="view_id" ref="sb_product_wheels_tree_view"/-->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_product_variants_donor_wheels" name="Donor Wheels" parent="base.menu_product" action="sb_product_wheels_donor_wheels_action" sequence="12"/>
+    
+    <record id="sb_product_wheels_exchange_stock_action" model="ir.actions.act_window">
+            <field name="name">Exchange Stock</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('exchange_stock', '=', True)]</field>
+            <field name="context">{'search_default_exchange_stock':1, 'default_exchange_stock': 1, 'default_type': 'product'}</field>
+            <!--field name="view_id" ref="sb_product_wheels_tree_view"/-->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_product_variants_exchange_stock" name="Exchange Stock" parent="base.menu_product" action="sb_product_wheels_exchange_stock_action" sequence="11"/>
+    
+    <record id="sb_product_tyres_action" model="ir.actions.act_window">
+            <field name="name">Tyres</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_var_tyre_id':1, 'default_sb_type': 'tyre' , 'default_type': 'product'}</field>
+            <!--field name="view_id" ref="sb_product_wheels_tree_view"/-->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_producttyres_variant" name="Tyres" parent="base.menu_product" action="sb_product_tyres_action" sequence="11"/>
+
+    <record id="sb_product_services_action" model="ir.actions.act_window">
+            <field name="name">Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_service_sale_type':'refurbish', 'default_sb_type': 'services'}</field>
+            <!--field name="view_id" ref="sb_product_wheels_tree_view"/-->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <record id="sb_product_services_action2" model="ir.actions.act_window">
+            <field name="name">Services</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_service_sale_type':'repair', 'default_sb_type': 'services'}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    <record id="sb_product_services_action3" model="ir.actions.act_window">
+        <field name="name">Other Services</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_service_sale_type':'other_service', 'default_sb_type': 'services'}</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add New.
+          </p><p>
+            
+          </p>
+        </field>
+    </record>
+    
+    <menuitem id="sb_productservices_variant" name="Services" parent="base.menu_product" sequence="13"/>
+    <menuitem id="sb_productservices_Refurbish" name="Refurbish" parent="sb_productservices_variant" action="sb_product_services_action"/>
+    <menuitem id="sb_productservices_Repair" name="Repair" parent="sb_productservices_variant" action="sb_product_services_action2"/>
+    <menuitem id="sb_productservices_other_services" name="Other Services" parent="sb_productservices_variant" action="sb_product_services_action3"/>
+    <menuitem id="sb_productservices_Packages" name="Packages" parent="sb_productservices_variant" action="sb_product_packages_action"/>
+    
+    <record id="sb_product_accessories_action" model="ir.actions.act_window">
+            <field name="name">Accessories</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'search_default_var_accessories_id':1, 'default_sb_type': 'accessories', 'default_type': 'product'}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_productaccessories_variant" name="Accessories" parent="base.menu_product" action="sb_product_accessories_action" sequence="12"/>
+
+    </data>
+</openerp>

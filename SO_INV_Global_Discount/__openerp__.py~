@@ -1,0 +1,22 @@
+{
+    'name': 'HiTech_SO_INV_Global_Discount',
+    'version': '1.0',
+    'category': 'extra',
+        'sequence': 1,
+    'summary': "Show Discount Total and Total before Discount on Sale Order, Invoice. ",
+    'description':"Show Discount Total and Total before Discount on Sale Order, Invoice.",
+    'author': 'Caret Opensource Solutions',
+    'website': 'www.coftware.com',
+    'depends': ['sale', 'account_voucher', 'sale_layout', 'HiTech_invoice_retention',],
+    'data': [
+        'views/invoice_discount_view.xml',
+        'views/sale_discount_view.xml',
+        'views/report_invoice_discount.xml',
+        'views/report_invoice_retention_discount.xml',
+        'views/report_sale_discount.xml',
+    ],
+    'installable': True,
+    'auto_install': False,
+}
+
+

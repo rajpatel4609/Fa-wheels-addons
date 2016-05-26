@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="sb_account_invoice_form">
+            <field name="name">account.invoice.sb.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                    <xpath expr="//field[@name='amount_tax']" position="attributes">
+                        <attribute name="string">VAT</attribute>
+                    </xpath>
+                    <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']" position="attributes">
+                        <attribute name="string">VAT</attribute>
+                    </xpath>
+                    <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='discount']" position="attributes">
+                        <attribute name="string">Discount</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='invoice_line_tax_ids']" position="attributes">
+                        <attribute name="string">VAT</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='payment_term_id']" position="after">
+                        <field name="vehicle_reg" placeholder="Enter Vehicle Number" help="User need to enter valid UK vehicle number, on that basis system will return Make and Model"/>
+                        <field name="make_id"/>
+                        <field name="model_id" domain="[('brand_id', '=', make_id)]" context="{'default_brand_id': make_id}"/>
+                    </xpath>
+                    <xpath expr="//field[@name='invoice_line_ids']/tree" position="before">
+                    <form string="Sales Order Lines">
+                        <separator string="Kind of Services"/>
+                        <group>
+                            <group>
+                                <field name="sb_type"/>
+                            </group>
+                            <group>
+                                <field name="product_sale_type" attrs="{'invisible':[('sb_type','!=', 'wheel'),('sb_type','!=', 'tyre')]}"/>
+                                <field name="service_sale_type" attrs="{'invisible':[('sb_type','!=', 'services')]}" />
+                                <field name="by_filter" attrs="{'invisible':[('sb_type','!=', 'accessories')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="product_id" groups="base.group_user" domain = "[('sb_type','=',sb_type)]"/>
+                            </group>
+                            <group>
+                                <field name="default_code"/>
+                                <field name="package_id"  attrs="{'invisible': True}"/>
+                            </group>
+                        </group>
+                        <separator string="Vehicle Details" attrs="{'invisible':[('by_filter','=', False),]}"/>
+                        <group col="6" attrs="{'invisible':[ ('by_filter','=', False)]}">
+                            <field name="vehicle_reg"/>
+                            <field name="make_id" widget="selection"/>
+                            <field name="model_id" domain="[('brand_id', '=', make_id)]" context="{'default_brand_id': make_id}" widget="selection" />
+                        </group>
+                        <field name="product_image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <field name="name" default_focus="1" placeholder="Product Details"/>
+                        </div>
+                        <group col="2">
+                            <field name="spare_wheel" />
+                        </group>
+                        <group col="8">
+                            <field name="left_front" /> 
+                            <field name="right_front" /> 
+                            <field name="left_back" /> 
+                            <field name="right_back" /> 
+                        </group>
+                        <separator string="Wheel Attributes"/>
+                        <group col="6">
+                            <field name="wheel_width"/>
+                            <field name="wheel_height"/>
+                            <field name="wheel_speed"/>
+                            <field name="wheel_diameter"/>
+                            <field name="wheel_offset"/>
+                            <field name="wheel_pcd"/>
+                            <field name="wheel_color"/>
+                        </group>
+                        <group col="6" attrs="{'invisible':[ ('by_filter','=', False),]}">
+                            <field name="size_id" widget="selection"/>
+                            <field name="style_id" attrs="{'invisible': [('model_id', '=', False)]}" domain="[('model_id', '=', model_id)]" />
+                            <field name="type_id" attrs="{'invisible': [('model_id', '=', False)]}" domain="[('model_id', '=', model_id)]" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="quantity" context="{'wheel_left_front': left_front,
+                                            'wheel_right_front': right_front,
+                                            'wheel_left_back': left_back,
+                                            'wheel_right_back': right_back,
+                                            'wheel_sb_type': sb_type,
+                                            'wheel_product_sale_type': product_sale_type,
+                                            'wheel_service_sale_type': service_sale_type,
+                                            'wheel_spare_wheel': spare_wheel,
+                                            'wheel_package_id': package_id,}"/>
+                                <field name="price_unit"/>
+                                
+                            </group>
+                            <group>
+                                <field name="discount" groups="sale.group_discount_per_so_line"/>
+                                <field name="invoice_line_tax_ids" widget="many2many_tags" context="{'type':parent.type}"
+                                            domain="[('type_tax_use','=','sale'),('company_id', '=', parent.company_id)]" options="{'no_create': True}"/>
+                                <field name="account_id" groups="account.group_account_user"
+                                        domain="[('company_id', '=', parent.company_id), ('internal_type', '=', 'other')]"/>
+                                <field name="account_analytic_id" groups="analytic.group_analytic_accounting"
+                                        domain="[('company_id', '=', parent.company_id)]"/>
+                            </group>
+                            
+                        </group>
+                    </form>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

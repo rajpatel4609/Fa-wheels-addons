@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <record id="form_sb_brands_view" model="ir.ui.view">
+            <field name="name">sb.brands.form</field>
+            <field name="model">sb.brands</field>
+            <field name="arch" type="xml">
+                <form string="Brand/Make"  >
+                    <sheet>
+                        <field name="logo" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name"/>
+                            </h1>
+                        </div>
+                       <group>
+                           <group>
+                                <field name="website"/>
+                           </group>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+    </record>
+
+    <record id="sb_brands_tree_view" model="ir.ui.view">
+            <field name="name">sb.brands.tree</field>
+            <field name="model">sb.brands</field>
+            <field name="arch" type="xml">
+                <tree string="Brand/Make">
+                    <field name="name"/>
+                    <field name="website"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="sb_brands_action" model="ir.actions.act_window">
+            <field name="name">Brands/Make</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.brands</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_brands_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="base.menu_fa_wheels_config" name="FA-Configuration" parent="base.menu_base_partner"
+            sequence="99" groups="base.group_configuration"/>
+    <menuitem id="sb_brands_wheels" name="Vehicle" parent="base.menu_fa_wheels_config" sequence="10"/>
+    <menuitem id="sb_brands_menuitem" name="Brand/Make" parent="sb_brands_wheels" action="sb_brands_action" sequence="10"/>
+
+    <record id="form_sb_vehicle_model_view" model="ir.ui.view">
+            <field name="name">sb.vehicle.model.form</field>
+            <field name="model">sb.vehicle.model</field>
+            <field name="arch" type="xml">
+                <form string="Model" >
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name"/>
+                        </h1>
+                    </div>
+                   <group>
+                       <group>
+                            <field name="brand_id"/>
+                            <field name="fuel_type"/>
+                            <field name="transmission_type"/>
+                            <field name="color"/>
+                       </group>
+                       <group>
+                            <field name="number"/>
+                            <field name="make_year"/>
+                            <field name="wheels"/>
+                            <field name="wheels_code"/>
+                       </group>
+                   </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+    <record id="sb_vehicle_model_tree_view" model="ir.ui.view">
+            <field name="name">sb.vehicle.model.tree</field>
+            <field name="model">sb.vehicle.model</field>
+            <field name="arch" type="xml">
+                <tree string="Models">
+                    <field name="name"/>
+                    <field name="make_year"/>
+                    <field name="wheels"/>
+                    <field name="wheels_code"/>
+                    <field name="brand_id"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="sb_vehicle_model_action" model="ir.actions.act_window">
+            <field name="name">Model</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.vehicle.model</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_vehicle_model_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+
+    <menuitem id="sb_vehicle_model_menuitem" name="Model" parent="sb_brands_wheels" action="sb_vehicle_model_action" sequence="10"/>
+
+    <record id="form_sb_model_size_view" model="ir.ui.view">
+            <field name="name">sb.model.size.form</field>
+            <field name="model">sb.model.size</field>
+            <field name="arch" type="xml">
+                <form string="Wheels Size" >
+                <sheet>
+                   <group>
+                       <group>
+                           <field name="name" placeholder="Wheels Size"/>
+                       </group>
+
+                   </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+    <record id="sb_model_size_tree_view" model="ir.ui.view">
+            <field name="name">sb.model.size.tree</field>
+            <field name="model">sb.model.size</field>
+            <field name="arch" type="xml">
+                <tree string="Wheels Size">
+                    <field name="name"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_model_size_action" model="ir.actions.act_window">
+            <field name="name">size</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.model.size</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_model_size_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    <menuitem id="sb_model_size_menuitem" name="Wheel Size" parent="sb_brands_wheels" action="sb_model_size_action" sequence="10"/>
+
+    <record id="form_sb_model_style_view" model="ir.ui.view">
+            <field name="name">sb.model.style.form</field>
+            <field name="model">sb.model.style</field>
+            <field name="arch" type="xml">
+                <form string="Wheels Style"  >
+                <sheet>
+                   <group>
+                       <group>
+                           <field name="name" placeholder="Wheels Style"/>
+                       </group>
+                       <group>
+                           <field name="model_id"/>
+                       </group>
+                   </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+    <record id="sb_model_style_tree_view" model="ir.ui.view">
+            <field name="name">sb.model.style.tree</field>
+            <field name="model">sb.model.style</field>
+            <field name="arch" type="xml">
+                <tree string="Wheels Style">
+                    <field name="name"/>
+                    <field name="model_id"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_model_style_action" model="ir.actions.act_window">
+            <field name="name">Style</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.model.style</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_model_style_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    <menuitem id="sb_model_style_menuitem" name="Wheel Style" parent="sb_brands_wheels" action="sb_model_style_action" sequence="10"/>
+
+    <record id="form_sb_model_type_view" model="ir.ui.view">
+            <field name="name">sb.model.type.form</field>
+            <field name="model">sb.model.type</field>
+            <field name="arch" type="xml">
+                <form string="Wheels Type"  >
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Wheels Type"/>
+                        </group>
+                       <group>
+                           <field name="model_id"/>
+                       </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+    <record id="sb_model_type_tree_view" model="ir.ui.view">
+            <field name="name">sb.model.type.tree</field>
+            <field name="model">sb.model.type</field>
+            <field name="arch" type="xml">
+                <tree string="Wheels Type">
+                    <field name="name"/>
+                    <field name="model_id"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_model_type_action" model="ir.actions.act_window">
+            <field name="name">Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.model.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_model_type_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_model_type_menuitem" name="Wheel Type" parent="sb_brands_wheels" action="sb_model_type_action" sequence="10"/>
+
+
+    <record id="sb_rder_tags_tree_view" model="ir.ui.view">
+            <field name="name">sb.vehicle.tag.tree</field>
+            <field name="model">sb.vehicle.tag</field>
+            <field name="arch" type="xml">
+                <tree string="Refurb/Repair Tag" editable="top">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="external_no"/>
+                    <field name="barcode_no"/>
+                    <field name="product_id"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_sb_order_note_tree_view" model="ir.ui.view">
+            <field name="name">sb.order.note.tree</field>
+            <field name="model">sb.order.note</field>
+            <field name="arch" type="xml">
+                <tree string="Notes" editable="top">
+                    <field name="name"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_sb_parts_restock_tree_view" model="ir.ui.view">
+            <field name="name">sb.parts.restock.tree</field>
+            <field name="model">sb.parts.restock</field>
+            <field name="arch" type="xml">
+                <tree string="Item ReStock" editable="top">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="qty"/>
+                    <field name="image"/>
+                    <field name="date" invisible="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_inspection_tree_view" model="ir.ui.view">
+            <field name="name">sb.vehicle.inspection.tree</field>
+            <field name="model">sb.vehicle.inspection</field>
+            <field name="arch" type="xml">
+                <tree string="Inspection" editable="top">
+                    <field name="name"/>
+                    <field name="comment"/>
+                    <field name="image"/>
+                    <field name="date" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="sale_line_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_onsite_images_tree_view" model="ir.ui.view">
+            <field name="name">sb.onsite.images.tree</field>
+            <field name="model">sb.onsite.images</field>
+            <field name="arch" type="xml">
+                <tree string="Images" editable="top">
+                    <field name="name"/>
+                    <field name="kindof"/>
+                    <field name="image"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_line_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_before_images_tree_view" model="ir.ui.view">
+            <field name="name">sb.before.images.tree</field>
+            <field name="model">sb.before.images</field>
+            <field name="arch" type="xml">
+                <tree string="Images" editable="top">
+                    <field name="name"/>
+                    <field name="image"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_line_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_after_images_tree_view" model="ir.ui.view">
+            <field name="name">sb.after.images.tree</field>
+            <field name="model">sb.after.images</field>
+            <field name="arch" type="xml">
+                <tree string="Images" editable="top">
+                    <field name="name"/>
+                    <field name="image"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_line_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_echange_their_form_view" model="ir.ui.view">
+            <field name="name">sb.exchange.their.images.form</field>
+            <field name="model">sb.exchange.their.images</field>
+            <field name="arch" type="xml">
+                <form string="Old Stock Process"  >
+                <header>
+                    <button name="process_refurb_stock" string="Update Stock" type="object" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <h1> <field name="name" placeholder="Name" /> </h1>
+                    <group>
+                        <group>
+                            <field name="product_id" required="1" domain="[('is_unfinish','=', 1), ('is_sub_product','=', 1)]"/>
+                            <field name="qty" required="1"/>
+                            
+                        </group>
+                       <group>
+                            <field name="partner_id" required="1" string="Supplier" domain="[('supplier','=',True)]" />
+                            <field name="status" readonly="1"/>
+                       </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+    <record id="sb_echange_their_tree_view" model="ir.ui.view">
+            <field name="name">sb.exchange.their.images.tree</field>
+            <field name="model">sb.exchange.their.images</field>
+            <field name="arch" type="xml">
+                <tree string="Old Stock Process">
+                    <field name="product_id" domain="[('is_unfinish','=', 1), ('is_sub_product','=', 1)]" attrs="{'readonly': [('status','=', 'b')]}"/>
+                    <field name="name"  attrs="{'readonly': [('status','=', 'b')]}"/>
+                    <field name="qty" attrs="{'readonly': [('status','=', 'b')]}"/>
+                    <field name="image" invisible="1"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="status" readonly="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_echange_their_action" model="ir.actions.act_window">
+            <field name="name">Old Stock Process</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.exchange.their.images</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_echange_their_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_echange_their_menuitem" name="Get Stock" action="sb_echange_their_action" parent="base.menu_sales" sequence="13" groups="base.group_sale_salesman,base.group_sale_manager"/>
+
+
+    <record id="sb_product_finish_form" model="ir.ui.view">
+            <field name="name">sb.product.finish.form</field>
+            <field name="model">sb.product.finish</field>
+            <field name="arch" type="xml">
+                <form string="Process Old Stock For Sales"  >
+                <header>
+                    <button name="process_refurb_stock" string="Process Refurb Order" type="object" class="oe_highlight"/>
+                    <button name="view_joborders" string="View Job Order" type="object"/>
+                </header>
+                <sheet>
+                    <h1> <field name="name" readonly="1" placeholder="Name" /> </h1>
+                    <group>
+                        <group>
+                            <field name="from_product" required="1" domain="[('is_unfinish','=',1), ('is_sub_product','=',1)]"/>
+                            <field name="package_id" required="1" widget="selection"/>
+                            <field name="sale_line_id" required="1"/>
+                            
+                            
+                        </group>
+                       <group>
+                            <field name="to_product" required="1" domain="[('is_unfinish','=', 0), ('is_sub_product','=', 1)]"/>
+                            <field name="quantity" required="1" />
+                            <field name="unfinish_stock" readonly="1" />
+                            <field name="partner_id" readonly="1" />
+                       </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+    <record id="sb_product_finish_tree" model="ir.ui.view">
+            <field name="name">sb.product.finish.tree</field>
+            <field name="model">sb.product.finish</field>
+            <field name="arch" type="xml">
+                <tree string="Process Old Stock For Sale ">
+                    <field name="from_product"/>
+                    <field name="name"/>
+                    <field name="quantity"/>
+                    <field name="sale_line_id" />
+                    <field name="package_id" />
+                </tree>
+            </field>
+    </record>
+    <record id="sb_product_finish_action" model="ir.actions.act_window">
+            <field name="name">Process Old Stock For Sale</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.product.finish</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_product_finish_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_product_finish_menuitem" name="Process Stock" action="sb_product_finish_action" parent="base.menu_sales" sequence="13" groups="base.group_sale_salesman,base.group_sale_manager"/>
+
+
+    <record id="sb_exchange_own_tree_view" model="ir.ui.view">
+            <field name="name">sb.exchange.our.images.tree</field>
+            <field name="model">sb.exchange.our.images</field>
+            <field name="arch" type="xml">
+                <tree string="Images" editable="top">
+                    <field name="name"/>
+                    <field name="image"/>
+                    <field name="date" readonly="1"/>
+                    <field name="user_id" readonly="1"/>
+                    <field name="sale_line_id" invisible="1"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="form_sb_product_package_view" model="ir.ui.view">
+            <field name="name">sb.product.package.form</field>
+            <field name="model">sb.product.package</field>
+            <field name="arch" type="xml">
+                <form string="Package"  >
+                <sheet>
+                       <h1><field name="name" placeholder="Package Title..."/></h1>
+                    <group col="6" colspan="5">
+                           <span/>
+                           <span><b>1 Unit</b></span>
+                           <span><b>Pair</b></span>
+                           <span><b>4 Set</b></span>
+                           <span><b>5 Set</b></span><span/>
+                           <field name="service_front_1unit" string="Front"/>
+                           <field name="service_front_pair" nolabel="1"/>
+                           <field name="service_front_set4" nolabel="1"/>
+                           <field name="service_front_set5" nolabel="1"/>
+                           <span/><field name="service_back_1unit" string="Back"/>
+                           <field name="service_back_pair" nolabel="1"/>
+                           <span/>
+                           <span/>
+                        </group>
+                       <field name="process_ids"/>
+                       <group col="6">
+                            <field name="tyre_provision"/>
+                            <field name="caronsite"/>
+                            <field name="donorwheel"/>
+                            <field name="donorwheel_charge" invisible="1"/>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+    </record>
+    <record id="form_sb_product_package_view2" model="ir.ui.view">
+            <field name="name">sb.product.package.form</field>
+            <field name="model">sb.product.package</field>
+            <field name="arch" type="xml">
+                <form string="Package"  >
+                <sheet>
+                       <h1><field name="name" placeholder="Package Title..."/></h1>
+                       <group col="6" colspan="5">
+                           <span/>
+                           <span><b>1 Unit</b></span>
+                           <span><b>Pair</b></span>
+                           <span><b>4 Set</b></span>
+                           <span><b>5 Set</b></span><span/>
+                           <field name="service_front_1unit" string="Front"/>
+                           <field name="service_front_pair" nolabel="1"/>
+                           <field name="service_front_set4" nolabel="1"/>
+                           <field name="service_front_set5" nolabel="1"/>
+                           <span/><field name="service_back_1unit" string="Back"/>
+                           <field name="service_back_pair" nolabel="1"/>
+                           <span/>
+                           <span/>
+                       </group>
+                       <field name="process_ids"/>
+                       <group col="6">
+                            <field name="tyre_provision"/>
+                            <field name="caronsite"/>
+                            <field name="donorwheel"/>
+                            <field name="donorwheel_charge" invisible="1"/>
+                       </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+    <record id="sb_product_packages_tree_view" model="ir.ui.view">
+            <field name="name">sb.product.package.tree</field>
+            <field name="model">sb.product.package</field>
+            <field name="arch" type="xml">
+                <tree string="Packages">
+                    <field name="name"/>
+                    <field name="tyre_provision"/>
+                    <field name="caronsite"/>
+                    <field name="donorwheel"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="sb_product_packages_action" model="ir.actions.act_window">
+            <field name="name">Packages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.product.package</field>
+            <field name="view_type">form</field>
+            <field name="context">{'form_view_ref': 'sb_wheels.form_sb_product_package_view2'}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_product_packages_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    <menuitem id="sb_job_process_root" name="Job Order" groups='base.group_refurb_users'/>    
+    <menuitem id="sb_job_process_orders" name="Job Order" parent="sb_job_process_root"/>
+    <menuitem id="sb_job_process_refurb" name="Refurb" parent="sb_job_process_root" groups='base.group_refurb_users'/>
+    
+    <record id="sb_job_item_tree_view" model="ir.ui.view">
+            <field name="name">sb.job.item.tree</field>
+            <field name="model">sb.job.item</field>
+            <field name="arch" type="xml">
+                <tree string="Job Order Items" create="0">
+                    <field name="sequence" readonly="1"/>
+                    <field name="name" readonly="1"/>
+                    <field name="wheels_perticulars" readonly="1"/>
+                    <field name="customer_id" readonly="1"/>
+                    <field name="sale_order_id" readonly="1"/>
+                    <field name="vehicle_reg" readonly="1"/>
+                    <field name="make_id" readonly="1"/>
+                    <field name="model_id" readonly="1"/>
+                    <field name="size_id" readonly="1"/>
+                    <field name="style_id" readonly="1"/>
+                    <field name="subprocess_id" readonly="1"/>
+                    <field name="tag_title" readonly="1"/>
+                    <field name="job_order_id" invisible="1"/>
+                    <field name="product_package_id" invisible="1"/>
+                    <field name="is_completed"/>
+                    <field name="comment"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_job_item_tree_view_xx" model="ir.ui.view">
+            <field name="name">sb.job.item.tree</field>
+            <field name="model">sb.job.item</field>
+            <field name="arch" type="xml">
+                <tree string="Job Order Items" create="0">
+                    <field name="sequence" readonly="1"/>
+                    <field name="job_order_id" readonly="1"/>
+                    <field name="customer_id" readonly="1"/>
+                    <field name="sale_order_id" readonly="1"/>
+                    <field name="vehicle_reg" readonly="1"/>
+                    <field name="make_id" readonly="1"/>
+                    <field name="model_id" readonly="1"/>
+                    <field name="size_id" readonly="1"/>
+                    <field name="style_id" readonly="1"/>
+                    <field name="wheels_perticulars"  readonly="1" string="Side"/>
+                    <field name="name" readonly="1"/>
+                    <field name="subprocess_id" readonly="1"/>
+                    <field name="tag_title" readonly="1"/>
+                    <field name="product_package_id" readonly="1"/>
+                    <field name="is_completed"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_job_item_action" model="ir.actions.act_window">
+            <field name="name">Job Order Items</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.job.item</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_job_item_tree_view_xx"/>
+    </record>
+    <record id="form_sb_job_process_view" model="ir.ui.view">
+            <field name="name">sb.job.process.form</field>
+            <field name="model">sb.job.process</field>
+            <field name="arch" type="xml">
+                <form string="Process"  >
+                <sheet>
+                   <h1><field name="name" placeholder="Job Process Name."/></h1>
+                   <group>
+                       <group>
+                           <field name="main_process" string="Main Process"/>
+                           <field name="sequence"/>
+                       </group>
+                       <group>
+                            <field name="not_include"/>
+                           <field name="subprocess_id"/>
+                           <field name="tag_ids" widget="many2many_tags" placeholder="Tag Important Attributes..."/> 
+                       </group>
+                   </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+
+
+    <record id="sb_job_process_tree_view" model="ir.ui.view">
+            <field name="name">sb.job.process.tree</field>
+            <field name="model">sb.job.process</field>
+            <field name="arch" type="xml">
+                <tree string="Job Process">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="subprocess_id"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_job_process_action" model="ir.actions.act_window">
+            <field name="name">Job Process</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.job.process</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_job_process_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    
+    <record id="sb_job_order_calendar" model="ir.ui.view">
+        <field name="name">Job Order</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Job Orders" color="sale_order_id" date_start="booking_date" date_stop="booking_date">
+                <field name="name"/>
+                <field name="customer_id"/>
+                <field name="vehicle_reg"/>
+                <field name="model_id"/>
+                <field name="wheels_perticulars"/>
+            </calendar>
+         </field>
+    </record>
+    <record id="form_sb_job_order_form_view" model="ir.ui.view">
+            <field name="name">sb.job.order.form</field>
+            <field name="model">sb.job.order</field>
+            <field name="arch" type="xml">
+                <form string="Job Orders" create="0">
+                <sheet>
+                       <h1><field name="name"/></h1>
+                       
+                       <group col="4">
+                            <field name="date"/>
+                            <field name="booking_ready"/>
+                            <field name="booking_date"/>
+                            <field name="collection_date"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            
+                            <field name="state" readonly="1"/>
+                            <field name="product_package_id" readonly="1"/>
+                            <field name="barcode_no" placeholder="Wheel Number...." readonly="1"/>
+                            <field name="vehicle_reg" readonly="1"/>
+                            <field name="make_id" readonly="1"/>
+                            <field name="model_id" readonly="1"/>
+                            <field name="size_id" readonly="1"/>
+                            <field name="style_id" readonly="1"/>
+                       </group>
+                       <field name="wheels_perticulars" placeholder="Particulars..." readonly="1"/>
+                       
+                       <h2 class="oe_horizontal_separator oe_clear">Process</h2>
+                       <field name="process_ids" nolabel="1"/>
+                       <field name="end_date" invisible="1"/>
+                </sheet>
+               <div class="oe_chatter">
+                  <field name="message_follower_ids" widget="mail_followers"/>
+                  <field name="message_ids" widget="mail_thread"/>
+               </div>
+                </form>
+            </field>
+    </record>
+    <record id="sb_job_order_tree_view" model="ir.ui.view">
+            <field name="name">sb.job.order.tree</field>
+            <field name="model">sb.job.order</field>
+            <field name="arch" type="xml">
+                <tree string="Job Order" create="0" edit="0" >
+                    <field name="name"/>
+                    <field name="sale_order_id" readonly="1"/>
+                    <field name="customer_id" readonly="1"/>
+                    <field name="collection_date"/>
+                    <field name="wheels_perticulars"/>
+                     <field name="vehicle_reg" readonly="1"/>
+                     <field name="make_id" readonly="1"/>
+                     <field name="model_id" readonly="1"/>
+                     <field name="size_id" readonly="1"/>
+                     <field name="style_id" readonly="1"/>
+                     <field name="booking_ready"/>
+                     <field name="booking_date"/>
+                     <field name="date"/>
+                    <field name="state" readonly="1"/>
+                </tree>
+            </field>
+    </record>
+    <record id="sb_job_order_action" model="ir.actions.act_window">
+            <field name="name">Job Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="sb_wheels.sb_job_order_tree_view"/>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="domain"></field>
+    </record>
+    <record id="view_sb_job_order_filter" model="ir.ui.view">
+        <field name="name">sb.job.order.select</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <search string="Job Orders">
+                <field name="name" string="Job Order"/>
+                <field name="state" string="Job Order State"/>
+                <field name="sale_order_id"/>
+                <field name="barcode_no"/>
+                <field name="product_id"/>
+                <field name="wheels_perticulars"/>
+                <separator/>
+                <filter icon="terp-check" string="Ready To Fit" name="booking_ready" domain="[('booking_ready','=',True)]"/>
+                <separator/>
+                <filter string="By Product" name="byproduct" icon="terp-personal" domain="[]" context="{'group_by':'product_id'}"/>
+                <filter string="By Sale Order" name="bysale" icon="terp-personal" domain="[]" context="{'group_by':'sale_order_id'}"/>
+           </search>
+        </field>
+    </record>
+
+    <record id="sb_job_order_action_booking" model="ir.actions.act_window">
+            <field name="name">Job Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+    </record>
+    
+    <record id="view_sale_order_calendar_fawheels" model="ir.ui.view">
+            <field name="name">sale.order.calendar</field>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <calendar string="Sales Orders" color="state" date_start="collection_date">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                </calendar>
+            </field>
+        </record>
+    <record id="sb_job_order_action_booking_calender" model="ir.actions.act_window">
+            <field name="name">Sale Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="view_sale_order_calendar_fawheels"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    
+    <record id="sb_job_order_s1_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="sb_job_order_s2_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="sb_job_order_s3_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="sb_job_order_s4_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="sb_job_order_s5_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="sb_job_order_s6_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="sb_job_order_s7_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="sb_job_order_s8_tree_view" model="ir.ui.view">
+        <field name="name">sb.job.order.tree</field>
+        <field name="model">sb.job.order</field>
+        <field name="arch" type="xml">
+            <tree string="Stand Blasting" editable="top" >
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <field name="wheels_perticulars" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <delete id="product.menu_product_template_action" model="ir.ui.menu"/>
+
+    <record model="ir.ui.view" id="sb_hr_emp_fawheel_form">
+    <field name="name">hr.employee.sb.formview</field>
+    <field name="model">hr.employee</field>
+    <field name="inherit_id" ref="hr.view_employee_form"/>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='bank_account_id']" position="after">
+                <field name="sb_ni_no" />
+                <field name="sb_nh_no" />
+                <field name="sb_kin_name" />
+                <field name="sb_kin_tel" />
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <field name="sb_joindate" />
+                <field name="sb_disjoindate" attrs="{'readonly': [('sb_joindate','=', False)]}"/>
+                <field name="sb_disjoin_note"  attrs="{'invisible': [('sb_disjoindate','=', False)]}"/>
+            </xpath>
+        </data>
+    </field>
+    </record>
+
+    <record id="sb_wheel_width_tree_view" model="ir.ui.view">
+        <field name="name">sb.wheels.width.tree</field>
+        <field name="model">sb.wheels.width</field>
+        <field name="arch" type="xml">
+            <tree string="Widths" editable="top">
+                <field name="name"/>
+                <field name="max"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="sb_wheel_width_action" model="ir.actions.act_window">
+        <field name="name">Widths</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.wheels.width</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="sb_wheel_width_tree_view"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add New.
+          </p><p>
+            
+          </p>
+        </field>
+    </record>
+    <menuitem id="sb_wheel_width_menuitem" name="Widths" parent="sb_brands_wheels" action="sb_wheel_width_action" sequence="10"/>
+
+    <record id="sb_wheel_height_tree_view" model="ir.ui.view">
+        <field name="name">sb.wheels.height.tree</field>
+        <field name="model">sb.wheels.height</field>
+        <field name="arch" type="xml">
+            <tree string="Height">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="sb_wheel_height_form_view" model="ir.ui.view">
+        <field name="name">sb.wheels.height.form</field>
+        <field name="model">sb.wheels.height</field>
+        <field name="arch" type="xml">
+            <form string="Height">
+                <sheet>
+                    <group>
+                        <group>
+                            <h1><field name="name" placeholder="Name.."/></h1>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sb_wheel_height_action" model="ir.actions.act_window">
+            <field name="name">Height</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.wheels.height</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_wheel_height_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+
+    <menuitem id="sb_wheel_height_menuitem" name="Height" parent="sb_brands_wheels" action="sb_wheel_height_action" sequence="10"/>
+            
+    <record id="sb_wheels_diameter_tree_view" model="ir.ui.view">
+        <field name="name">sb.wheels.diameter.tree</field>
+        <field name="model">sb.wheels.diameter</field>
+        <field name="arch" type="xml">
+            <tree string="Diameter">
+                <field name="name"/>
+                <field name="max"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="sb_wheels_diameter_form_view" model="ir.ui.view">
+        <field name="name">sb.wheels.diameter.form</field>
+        <field name="model">sb.wheels.diameter</field>
+        <field name="arch" type="xml">
+            <form string="Diameter">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="max"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sb_wheels_diameter_action" model="ir.actions.act_window">
+            <field name="name">Diameter</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.wheels.diameter</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_wheels_diameter_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+
+    <menuitem id="sb_wheels_diameter_menuitem" name="Diameter" parent="sb_brands_wheels" action="sb_wheels_diameter_action" sequence="10"/>
+
+    <record id="sb_wheels_offset_tree_view" model="ir.ui.view">
+            <field name="name">sb.wheels.offset.tree</field>
+            <field name="model">sb.wheels.offset</field>
+            <field name="arch" type="xml">
+                <tree string="Offset">
+                    <field name="name"/>
+                    <field name="max"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_wheels_offset_form_view" model="ir.ui.view">
+        <field name="name">sb.wheels.offset.form</field>
+        <field name="model">sb.wheels.offset</field>
+        <field name="arch" type="xml">
+            <form string="Offset">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="max"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sb_wheels_offset_action" model="ir.actions.act_window">
+            <field name="name">Offset</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.wheels.offset</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_wheels_offset_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+
+    <menuitem id="sb_wheels_offset_menuitem" name="Offset" parent="sb_brands_wheels" action="sb_wheels_offset_action" sequence="10"/>
+    
+    <record id="sb_wheels_sb_subprocess_tree_view" model="ir.ui.view">
+            <field name="name">sb.subprocess.tree</field>
+            <field name="model">sb.subprocess</field>
+            <field name="arch" type="xml">
+                <tree string="sb_subprocess">
+                    <field name="name"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_wheels_sb_subprocess_form_view" model="ir.ui.view">
+        <field name="name">sb.subprocess.form</field>
+        <field name="model">sb.subprocess</field>
+        <field name="arch" type="xml">
+            <form string="Sub Process">
+                <sheet>
+                    <group>
+                        <group>
+                            <h1><field name="name" placeholder="Name.."/></h1>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sb_wheels_sb_subprocess_action" model="ir.actions.act_window">
+            <field name="name">Sub Process</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.subprocess</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_wheels_sb_subprocess_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+                
+              </p>
+            </field>
+    </record>
+    <menuitem id="sb_brands_process" name="Processes" parent="base.menu_fa_wheels_config" sequence="11"/>
+    <menuitem id="sb_wheels_sb_subprocess_menuitem" name="Sub Process" parent="sb_brands_process" action="sb_wheels_sb_subprocess_action" sequence="12"/>
+    <menuitem id="sb_job_process_menuitem" name="Job Process" parent="sb_brands_process" action="sb_job_process_action" sequence="13"/>
+    
+
+    <!-- PCD Views-->
+    <record id="sb_wheels_sb_wheels_pcd_tree_view" model="ir.ui.view">
+            <field name="name">sb.wheels.pcd.tree</field>
+            <field name="model">sb.wheels.pcd</field>
+            <field name="arch" type="xml">
+                <tree string="sb_wheels_pcd">
+                    <field name="name"/>
+                </tree>
+            </field>
+    </record>
+    
+    <record id="sb_wheels_sb_wheels_pcd_form_view" model="ir.ui.view">
+        <field name="name">sb.wheels.pcd.form</field>
+        <field name="model">sb.wheels.pcd</field>
+        <field name="arch" type="xml">
+            <form string="PCD">
+                <sheet>
+                    <group>
+                        <group>
+                            <h1><field name="name" placeholder="PCD Name.."/></h1>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="sb_wheels_sb_wheels_pcd_action" model="ir.actions.act_window">
+            <field name="name">PCD</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sb.wheels.pcd</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="sb_wheels_sb_wheels_pcd_tree_view"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add New.
+              </p><p>
+              </p>
+            </field>
+    </record>
+
+    <menuitem id="sb_wheels_sb_wheels_pcd_menuitem" name="PCD" parent="sb_brands_wheels" action="sb_wheels_sb_wheels_pcd_action" sequence="11"/>
+    </data>
+</openerp>

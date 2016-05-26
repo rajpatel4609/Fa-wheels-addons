@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <!-- Main Menu-->
+    <menuitem id="sb_job_process_root" name="Job Order" />
+    <menuitem id="sb_job_process_sub" name="Job Order" parent="sb_job_process_root" sequence="1"/>
+    <menuitem id="sb_job_process_refurb" name="Refurb" parent="sb_job_process_root" groups='base.group_refurb_users' sequence="2"/>
+    <menuitem id="sb_job_process_config" name="Configuration" parent="sb_job_process_root" groups="base.group_no_one" sequence="3"/>
+    <!-- Sub Menu -->
+
+    <!-- Sale job order views -->
+    <record model="ir.ui.view" id="sale_job_item_kanban_view">
+        <field name="name">Sale Job Kanban</field>
+        <field name="model">sale.job.order</field>
+        <field name="arch" type="xml">
+            <fb_team_dashboard create="false">
+                <field name="state"/>
+                <field name="sale_order_id"/>
+                <field name="color"/>
+                <field name="job_ids"/>
+                <field name="job_completed"/>
+                <field name="job_item_completed"/>
+                <field name="total_job_item"/>
+                <field name="collection_date"/>
+                <field name="is_exchange"/>
+                <field name="is_repair"/>
+                <templates >
+                    <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown" groups="base.group_user">
+                                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                        <span class="fa fa-bars fa-lg"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <t t-if="widget.editable"><li><a type="edit">Edit</a></li></t>
+                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                    </ul>
+                                </div>
+                            <div class="oe_kanban_content">
+                                <div>
+                                <ul>
+                                    <li>
+                                        <span class="label label-default pull-left" t-if="record.is_exchange.raw_value"> 
+                                            Stock  Jobs
+                                        </span>
+                                        <t t-if="!record.is_repair.raw_value">
+                                            <span class="label label-primary" t-if="!record.is_exchange.raw_valuev "> 
+                                                Customer Jobs
+                                            </span>
+                                        </t>
+                                        <t t-js="dict">console.warn('Unhandled widget', dict);</t>
+                                        <span class="label label-primary" t-if="record.is_repair.raw_value"> 
+                                            Customer Jobs with Repair
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="pull-left">
+                                        <a class="oe_kanban_action btn-large btn btn-link" name="return_action_to_open" type="object" data-context='{"object":"sb_job_order"}'>
+                                            <h5>Jobs(<field name="job_completed"/>/<field name="total_job"/>)</h5>
+                                        </a>
+                                        </span>
+
+
+                                        <a class="oe_kanban_action pull-right btn-large btn btn-link" type="object" name="return_action_to_open" data-context='{"object":"sale_order"}'>
+                                            <h5>  <field name="sale_order_id"/> </h5>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="oe_kanban_action btn-large btn btn-link" name="return_action_to_open" type="object" data-context='{"object":"sb_job_item"}'>
+                                            <h5>Jobs Items(<field name="job_item_completed"/>/<field name="total_job_item"/>)</h5>
+                                        </a>
+                                        <a class="oe_kanban_action btn-large btn btn-link" name="return_action_to_open" type="object" data-context='{"object":"sb_job_calendar"}'>
+                                            <h5><field name="collection_date"/></h5>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <button t-if="record.state.raw_value[1] == 'Ready To Delivery'" type="object" class="btn btn-success pull-center btn-mini"  data-context='{"is_destroy":"true"}' name="mark_as_done_job"> Job Done </button>
+
+                                <button t-if="record.state.raw_value[1] == 'Work In Progess' " type="object" class="btn btn-success pull-center btn-mini" data-context='{"is_destroy":"true"}' name="mark_as_ready">Ready To Delivery</button>
+
+                                <button t-if="record.state.raw_value[1] == 'Draft'" type="object" class="btn btn-success pull-center btn-mini" data-context='{"is_destroy":"true"}' name="mark_as_cancel">Job Cancel</button>
+
+                                <button t-if="record.state.raw_value[1] == 'Draft' " type="object" class="btn btn-success pull-right btn-mini" data-context='{"is_destroy":"true"}' name="mark_as_inprogress">In progess</button>
+
+                            </div>
+                            </div>
+                        </div>
+                        </t>
+                </templates>
+            </fb_team_dashboard>
+            </field>
+        </record>
+        
+    <record id="view_sale__job_order_filter" model="ir.ui.view">
+        <field name="name">sale.job.order.select</field>
+        <field name="model">sale.job.order</field>
+        <field name="arch" type="xml">
+            <search string="Job Orders">
+                <field name="sale_order_id"/>
+                <field name="state"/>
+                <separator/>
+                <separator/>
+                <filter icon="terp-document-new" string="State" name="bysale" context="{'group_by': 'state'}"/>
+                <filter icon="terp-document-new" string="By Sale Order" name="byso" context="{'group_by': 'sale_order_id'}"/>
+           </search>
+        </field>
+    </record>
+    <record id="sale_job_order_calendar" model="ir.ui.view">
+        <field name="name">Job Order</field>
+        <field name="model">sale.job.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Job Orders" color="sale_order_id" date_start="booking_date" date_stop="collection_date">
+                <field name="sale_order_id" string="SO"/>
+                <field name="booking_date" string="Booking Date"/>
+                <field name="collection_date" string="Collect Date"/>
+            </calendar>
+         </field>
+    </record>
+    
+    <record id="sale_job_order_action_general" model="ir.actions.act_window">
+            <field name="name">Job Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">fb_team_dashboard,calendar</field>
+            <field name="view_id" ref="sale_job_item_kanban_view"/>
+    </record>
+    <menuitem id="sale_job_order_menu_general" name="Job Orders" parent="sb_job_process_sub" action="sale_job_order_action_general" sequence="1"/> 
+    <record id="sale_job_order_action1" model="ir.actions.act_window">
+            <field name="name">Draft Job Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">fb_team_dashboard</field>
+            <field name="view_id" ref="sale_job_item_kanban_view"/>
+            <field name="domain">[('domain_name','=','Draft')]</field>
+    </record>
+    <menuitem id="sale_job_order_menuitem1" name="Draft Order" parent="sb_job_process_sub" action="sale_job_order_action1" sequence="2"/> 
+    
+    <record id="sale_job_order_action2" model="ir.actions.act_window">
+            <field name="name">Work In Progess Job Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">fb_team_dashboard</field>
+            <field name="view_id" ref="sale_job_item_kanban_view"/>
+            <field name="domain">[('domain_name','=','Work In Progess')]</field>
+    </record>
+    <menuitem id="sale_job_order_menuitem2" name="Work In Progess Order" parent="sb_job_process_sub" action="sale_job_order_action2" sequence="3"/> 
+    
+    <record id="sale_job_order_action3" model="ir.actions.act_window">
+            <field name="name">Ready To Deliver Job Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">fb_team_dashboard</field>
+            <field name="domain">[('domain_name','=','Ready To Delivery')]</field>
+            <field name="view_id" ref="sale_job_item_kanban_view"/>
+    </record>
+    <menuitem id="sale_job_order_menuitem3" name="Ready To Deliver Job Order" parent="sb_job_process_sub" action="sale_job_order_action3" sequence="4"/>
+    
+    <record id="sale_job_order_action4" model="ir.actions.act_window">
+            <field name="name">Delivered Job Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">fb_team_dashboard</field>
+            <field name="view_id" ref="sale_job_item_kanban_view"/>
+            <field name="domain">[('domain_name','=','Job Done')]</field>
+    </record>
+    <menuitem id="sale_job_order_menuitem4" name="Job Done" parent="sb_job_process_sub" action="sale_job_order_action4" sequence="5"/>  
+    
+    <record id="sale_job_order_action5" model="ir.actions.act_window">
+            <field name="name">Job Cancel Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">fb_team_dashboard</field>
+            <field name="view_id" ref="sale_job_item_kanban_view"/>
+            <field name="domain">[('domain_name','=','Job Cancel')]</field>
+    </record>
+    <menuitem id="sale_job_order_menuitem5" name="Job Cancel Order" parent="sb_job_process_sub" action="sale_job_order_action5" sequence="5"/>  
+    <!-- ********************* -->
+
+    <record id="tree_sb_job_order_simple_view" model="ir.ui.view">
+            <field name="name">sb.job.item.tree</field>
+            <field name="model">sb.job.item</field>
+            <field name="arch" type="xml">
+                <tree string="Process"   editable="top" create="0">
+                    <field name="job_order_id" readonly="1"/> 
+                    <field name="sale_order_id" readonly="1"/>
+                    <field name="model_id" readonly="1"/>
+                    <field name="vehicle_reg" readonly="1"/>
+                    <field name="product_package_id" readonly="1"/>
+                    <field name="subprocess_id" readonly="1"/>
+                    <field name="wheels_perticulars" readonly="1" string="Side"/>
+                    <field name="size_id" readonly="1"/>
+                    <field name="style_id" readonly="1"/>
+                    <field name="customer_id" readonly="1"/>
+                    <field name="is_completed"/>
+                    <field name="comment"/>
+                </tree>
+            </field>
+    </record>
+
+    <record id="form_sb_job_order_simple_view" model="ir.ui.view">
+            <field name="name">sb.job.item.form</field>
+            <field name="model">sb.job.item</field>
+            <field name="arch" type="xml">
+                <form string="Process" create="0">
+                <sheet>
+                    <h1><field name="job_order_id" readonly="1"/></h1>
+                    <group>
+                        <group>
+                            <field name="is_completed"/>
+                            <field name="name" readonly="1"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="product_package_id" readonly="1"/>
+                            <field name="make_id" readonly="1"/>
+                            <field name="model_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="comment"/>
+                            <field name="vehicle_reg" readonly="1"/>
+                            <field name="size_id" readonly="1"/>
+                            <field name="style_id" readonly="1"/>
+                            <field name="wheels_perticulars" readonly="1" string="Side"/>
+                            <field name="subprocess_id" readonly="1"/>
+                            <field name="tag_title" readonly="1"/>
+                        </group>
+                   </group>
+                </sheet>
+                </form>
+            </field>
+    </record>
+    
+    
+    <record id="view_sb_job_item_filter" model="ir.ui.view">
+        <field name="name">sb.job.item.select</field>
+        <field name="model">sb.job.item</field>
+        <field name="arch" type="xml">
+            <search string="Process">
+                <field name="job_order_id" string="Job Order"/>
+                <field name="barcode_no"/>
+                <field name="name"/>
+                <separator/>
+                <filter icon="terp-document-new" string="Completed" name="draft" domain="[('is_completed','=', True)]"/>
+                <filter icon="terp-document-new" string="Pending" name="pending" domain="[('is_completed','=', False)]"/>
+                <separator/>
+                <filter icon="terp-document-new" string="By Sale Orders" name="bysale" context="{'group_by': 'sale_order_id'}"/>
+                <filter icon="terp-document-new" string="By Job Order" name="byjob" context="{'group_by': 'job_order_id'}"/>
+                <filter icon="terp-document-new" string="By Make" name="bymake" context="{'group_by': 'make_id'}"/>
+                <filter icon="terp-document-new" string="By Model" name="bymodel" context="{'group_by': 'model_id'}"/>
+                <filter icon="terp-document-new" string="By Customer" name="customer_id" context="{'group_by': 'customer_id'}"/>
+           </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="sb_job_item_kanban_view">
+        <field name="name">SB Job order Item Kanban</field>
+        <field name="model">sb.job.item</field>
+        <field name="arch" type="xml">
+            <fb_team_dashboard create="0">
+                <field name="sale_order_id"/>
+                <field name="customer_id"/>
+                <field name="job_order_id"/>
+                <field name="vehicle_reg"/>
+                <field name="color"/>
+                <field name="is_completed"/>
+                <templates >
+                    <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown" groups="base.group_user">
+                                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                        <span class="fa fa-bars fa-lg"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <t t-if="widget.editable"><li><a type="edit">Edit</a></li></t>
+                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                    </ul>
+                                </div>
+                            <div class="oe_kanban_content">
+                                <div>
+                                <ul>
+                                    <li>
+                                        <a class="oe_kanban_action btn-large btn btn-link" name="return_action_to_open" type="object" data-context='{"object":"sb_job_order"}' >
+                                            <h5> <field name="job_order_id"/>(<field name="wheels_perticulars"/>)</h5>
+                                        </a>
+                                        <a class="oe_kanban_action pull-right btn-large btn btn-link" type="object" name="return_action_to_open" data-context='{"object":"sale_order"}'>
+                                            <h5>  <field name="sale_order_id"/> </h5>
+                                        </a>
+                                        <div class="pull-left col-xs-6">
+                                            <strong><field name="name"/></strong>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        
+                                        <a class="oe_kanban_action btn-large btn btn-link pull-left col-xs-6" type="object" name="return_action_to_open" data-context='{"object":"res_partner"}'>
+                                             <field name="customer_id"/>
+                                        </a>
+                                        <button t-if="!record.is_completed.raw_value" type="object" class="btn btn-success pull-right btn-mini"  data-context='{"is_destroy":"true"}' name="mark_as_done">Mark as Done</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            </div>
+
+                            
+                        </div>
+                        </t>
+                </templates>
+            </fb_team_dashboard>
+            </field>
+        </record>
+    <record id="sale_job_order_item_calendar" model="ir.ui.view">
+        <field name="name">Job Order Items</field>
+        <field name="model">sb.job.item</field>
+        <field name="arch" type="xml">
+            <calendar string="Job Order Items" color="sale_order_id" date_start="booking_date" date_stop="collection_date">
+                <field name="job_order_id"/>
+                <field name="sale_order_id" string="SO"/>
+                <field name="booking_date" string="Booking Date"/>
+                <field name="collection_date" string="Collect Date"/>
+            </calendar>
+         </field>
+    </record>
+    
+    <record id="sb_job_item_step_action_sale_job_order" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="context">{'group_by': ['job_order_id']}</field>
+
+        <field name="domain"></field>
+    </record>
+    <record id="sb_job_item_step1_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p1'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step1_menuitem" name="Tyre Removal" parent="sb_job_process_refurb" action="sb_job_item_step1_action" sequence="11"/>
+    <record id="sb_job_item_step2_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p2'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step2_menuitem" name="Strip Old Coating" parent="sb_job_process_refurb" action="sb_job_item_step2_action" sequence="11"/>
+    <record id="sb_job_item_step3_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p3'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step3_menuitem" name="Sand Blasting" parent="sb_job_process_refurb" action="sb_job_item_step3_action" sequence="11"/>
+    <record id="sb_job_item_step4_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p4'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step4_menuitem" name="Prep &amp; Repair Team" parent="sb_job_process_refurb" action="sb_job_item_step4_action" sequence="11"/>
+    <record id="sb_job_item_step5_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p5'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step5_menuitem" name="Ceremic Polishing" parent="sb_job_process_refurb" action="sb_job_item_step5_action" sequence="11"/>
+    <record id="sb_job_item_step6_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+       <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p6'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step6_menuitem" name="Paint" parent="sb_job_process_refurb" action="sb_job_item_step6_action" sequence="11"/>
+    <record id="sb_job_item_step7_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p7'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step7_menuitem" name="Diamond Cut" parent="sb_job_process_refurb" action="sb_job_item_step7_action" sequence="11"/>
+    <record id="sb_job_item_step8_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p8'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step8_menuitem" name="Lacquer" parent="sb_job_process_refurb" action="sb_job_item_step8_action" sequence="11"/>
+    <record id="sb_job_item_step9_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p9'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step9_menuitem" name="Quality Check" parent="sb_job_process_refurb" action="sb_job_item_step9_action" sequence="11"/>
+    <record id="sb_job_item_step10_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p10'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step10_menuitem" name="Finished Goods" parent="sb_job_process_refurb" action="sb_job_item_step10_action" sequence="11"/>
+    <record id="sb_job_item_step11_action" model="ir.actions.act_window">
+        <field name="name">Job Item Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sb.job.item</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="sb_job_item_kanban_view"/>
+        <field name="view_mode">fb_team_dashboard,tree,calendar,form</field>
+        <field name="domain">[('main_process','=','p11'),('is_completed','=',False)]</field>
+    </record>
+    <menuitem id="sb_job_item_step11_menuitem" name="Tyre Fitting" parent="sb_job_process_refurb" action="sb_job_item_step11_action" sequence="11"/>
+
+
+    <!-- Job Order Stages Views-->
+    <record id="sale_job_order_state_tree_1" model="ir.ui.view">
+            <field name="name">sale.job.order.state.tree</field>
+            <field name="model">sale.job.order.state</field>
+            <field name="arch" type="xml">
+                <tree string="Job Order Stages" editable="1">
+                    <field name="name"/>
+                    <field name="sequence"/>
+                </tree>
+            </field>
+    </record>
+
+    <!-- Job Order Actions-->
+    <record id="sale_job_order_state_action_1" model="ir.actions.act_window">
+            <field name="name">Job Order Stages</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.job.order.state</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+    </record>
+    <menuitem id="sale_job_order_state" name="Job Order Stages" parent="sb_job_process_config" action="sale_job_order_state_action_1" sequence="1" />
+
+    </data>
+</openerp>

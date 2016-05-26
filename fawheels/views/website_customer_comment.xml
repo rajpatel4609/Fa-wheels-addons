@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_website_customer_comment" model="ir.actions.act_window">
+        <field name="name">Website Customers Comments/Reviews</field>
+        <field name="res_model">website.customer.comment</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_my_websites':1}</field>
+    </record>
+
+   <!--  <record id="customer_comments_website_form" model="ir.ui.view">
+        <field name="name">Website Customers Comments/Reviews Form View</field>
+        <field name="model">website.customer.comment</field>
+        <field name="arch" type="xml">
+            <form string="Website customers comment">
+                <sheet>
+                    <group>
+                        <field name="customer_name"/>
+                        <field name="customer_image"/>
+                        <field name="customer_comment"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record> -->
+
+    <record id="customer_comments_website_list" model="ir.ui.view">
+        <field name="name">Website Customers Comments/Reviews List View</field>
+        <field name="model">website.customer.comment</field>
+        <field name="arch" type="xml">
+            <tree string="Website customers comment" editable="top">
+                <field name="customer_name"/>
+                <field name="customer_image"/>
+                <field name="customer_comment"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_website_customer_comment_config_settings" model="ir.ui.view">
+        <field name="name">Website settings</field>
+        <field name="model">website.config.settings</field>
+        <field name="inherit_id" ref="website.view_website_config_settings"/>
+        <field name="arch" type="xml">
+            <group name='advanced' position="before">
+                <group string="Website Customer Comments" name="website_customer_comment">
+                    <button type="action"
+                        name="%(fawheels.action_website_customer_comment)d"
+                        string="Configure website customer comments" class="oe_link"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+
+</odoo>

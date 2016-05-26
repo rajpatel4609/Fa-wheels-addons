@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+         <template id = "report_invoice_fa">
+            <t t-call="report.custom_external_layout">
+                <t t-call="report.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="row">
+                        </div>
+                        <br/>
+                        <h5 style="text-align: center;">
+                            <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">INVOICE</span>
+                            <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
+                            <span t-if="o.type == 'out_invoice' and o.state == 'draft'">DRAFT INVOICE</span>
+                            <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">CANCELLED INVOICE</span>
+                            <span t-if="o.type == 'out_refund'">Refund</span>
+                            <span t-if="o.type == 'in_refund'">Supplier Refund</span>
+                            <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
+                            
+                        </h5>
+                       <table class="row" alt="Powered By coftware.com" width="100%">
+                              <tr width="50%"> 
+                                  <td style="padding-left:20px;">
+                                       <span t-if="o.partner_id.title" t-field="o.partner_id.title"/> 
+                                       <span t-field="o.partner_id.name"/>
+                                  </td> 
+                                   <td style="padding-left:450px;"><b>Reference: </b>
+                                   <span t-if="o.number" t-field="o.number"/>
+                                   </td>
+                                </tr>
+                                <tr width="50%">
+                                    <td style="padding-left:20px;">
+                                        <span t-field="o.partner_id.house_number"/> <span t-field="o.partner_id.street"/>
+                                    </td> 
+                                    <td style="padding-left:450px;"><b>Date:  </b>
+                                        <span t-field="o.date_invoice" t-field-options="{&quot;format&quot;: &quot;dd-MM-y&quot;}"/> 
+                                    </td>
+                                </tr>
+                                <tr width="50%">
+                                    <td style="padding-left:20px;">
+                                        <span t-field="o.partner_id.city"/>
+                                    </td> 
+                                    <!-- <td style="padding-left:450px;"><b>VAT Number: </b>
+                                        <span t-field="o.company_id.partner_id.vat"/> 
+                                    </td> -->
+                                    <td style="padding-left:450px;"><b>Vehicle Reg.:</b>
+                                    <span t-field="o.vehicle_reg"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                <td style="padding-left:20px;">
+                                    <span t-field="o.partner_id.zip"/>
+                                </td>
+                                 <td style="padding-left:450px;"><b>Brand:</b>
+                                <span t-field="o.make_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:20px;">
+                                    <span t-field="o.partner_id.country_id.name"/>
+                                </td> 
+                                <td style="padding-left:450px;"><b>Model:</b>
+                                <span t-field="o.model_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td/>
+                               <td style="padding-left:450px;"><b>Sales Person: </b>
+                                <span t-field="o.user_id"/>
+                                </td>
+                            </tr>
+                       </table>
+                      <br/>
+                      <br/>
+                      <!-- Is there a discount on at least one line? -->
+                      <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Unit Price</th>
+                                    <th t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">Discount</th>
+                                    <th class="text-center">VAT</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+                                <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                    <td class="text-left col-xs-7"><span t-field="l.name"/></td>
+                                    <td class="text-center">
+                                        <t t-set="lquantity" t-value="l.quantity" />
+                                        <span t-esc="int(lquantity)"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.price_unit"/>
+                                    </td >
+                                    <td t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line" style="text-align: center;">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-xs-4 pull-right">
+                                <table class="table table-condensed">
+                                    <tr class="border-black">
+                                        <td><strong>Sub Total</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>VAT</td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-right">
+                                             <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    <p t-if="o.company_id.bank_ids">
+                    <strong>Bank account details:</strong><br/>
+                    <t t-foreach="o.company_id.bank_ids[0]" t-as="b">
+                          Account Name: <span t-field="b.bank_name"/> <br/>
+                          Sort Code: <span t-field="b.bank_bic"/> | Account Number: <span t-field="b.acc_number"/><br/>
+                    </t>
+                    </p>
+                    <p t-if="o.payment_term_id">
+                        <strong>Payment Term:</strong>
+                        <span t-field="o.payment_term_id"/>
+                    </p>
+                    <p t-if="o.fiscal_position_id">
+                        <strong>Fiscal Position:</strong>
+                        <span t-field="o.fiscal_position_id"/>
+                    </p>
+                    <p>
+                         <span t-field="o.comment"/>
+                    </p>
+                    <p>
+                    <br/><br/><br/><br/><br/>
+                    <h5>Thank you for your business!<br/> <br/></h5>
+                    It is the customer's responsibility to check the wheel nuts for tightness after an initial 30 miles of motoring.<br/>
+                    All goods are sold subject to our standard terms and conditions (please see the reverse of this invoice). Goods will be released once full payment has been received.<br/>
+                    </p>
+                    <p style="page-break-after:always;">   </p>
+                    <p style="text-align: justify;font-size:10px" t-field="res_company.term_and_condition"></p>
+                     <div class="oe_structure"/>
+                    </div>
+
+                </t>
+            </t>
+            </t>
+            </t>
+         </template>
+
+        <template id = "report.custom_external_layout">
+             <!-- Multicompany -->
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t t-call="sb_wheels.external_custom_layout_header"/>
+            <t t-raw="0"/>
+            <t t-call="sb_wheels.external_custom_layout_footer"/>
+
+        </template>
+
+        <template id = "external_custom_layout_header">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 200px;"/>
+                    </div>
+                    <div class="col-xs-9 text-left" style="margin-top:20px;font-size:16px;color:darkblue;padding-left:480px;" t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}"/>
+                    <div class="col-xs-12 text-left" style="margin-top:-20px;font-size:16px;color:darkblue;padding-left:705px;" t-field="company.email"/>
+                    <div class="col-xs-12 text-left" style="margin-top:1px;font-size:16px;color:darkblue;padding-left:705px;" t-field="company.phone"/>
+                </div>
+            </div>
+        </template>
+
+        <template id = "external_custom_layout_footer">
+             <div class="footer">
+                <p>Woodstock Alloy Wheel Refurbishing Ltd is trading as First Aid Wheels.</p>
+                <table width="100%">
+                    <tr >
+                           <td  width="50%">Proprietor: Woodstock Alloy Wheel RefurbishingLtd.</td>
+                           <br/><td  width="50%">Registered office: 174 Mill Lane, London, NW61TB |</td>
+                    </tr>
+                    <tr>
+                           <td width="50%">Registered in England &amp; Wales No. 7036663E. &amp; O. E.</td>
+                           <td width="50%">VAT Registration Number: 117 3581 21</td>
+                     </tr>
+                </table>
+            </div> 
+        </template>
+        
+        <template id="account.account_invoice_report_duplicate" inherit_id="sb_wheels.report_invoice_fa" primary="True">
+            <xpath expr="//h5" position="replace">
+                <h3>
+                    <span>Duplicate</span>
+                    <span t-field="o.number"/>
+                </h3>
+            </xpath>
+        </template>
+        <template id="account.account_invoice_report_duplicate_main">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="account.account_invoice_report_duplicate" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+       <report 
+            id="account.account_invoices" 
+            model="account.invoice" 
+            string="FA-Invoices" 
+            report_type="qweb-pdf" 
+            name="sb_wheels.report_invoice_fa" 
+            file="sb_wheels.report_invoice_fa" attachment_use="True"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')">
+       </report>
+       <report 
+            id="account.account_invoice_action_report_duplicate"
+            model="account.invoice"
+            string="Duplicates"
+            report_type="qweb-pdf"
+            name="account.account_invoice_report_duplicate_main"
+            file="account.report_invoice_duplicate"
+            attachment_use="False"
+        />
+   
+    <template id="sale.report_saleorder_document">
+      <t t-call="report.custom_external_layout">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="row">
+                        </div>
+                        <br/>
+                        <h5 style="padding-left:320px;"><b>Order No.: </b>
+                            <span t-field="doc.name"/>
+                        </h5>
+                        <table class="row" alt="Powered By coftware.com" width="100%">
+                            <tr> 
+                                <td style="padding-left:20px;">
+                                     <span t-if="doc.partner_id.title" t-field="doc.partner_id.title"/> 
+                                     <span t-field="doc.partner_id.name"/>
+                                </td> 
+                                <td style="padding-left:450px;"><b>Date:</b>
+                                    <span t-field="doc.date_order" t-field-options="{&quot;format&quot;: &quot;dd-MM-y&quot;}"/> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:20px;">
+                                    <span t-field="doc.partner_id.house_number"/> <span t-field="doc.partner_id.street"/>
+                                </td> 
+                                <!-- <td style="padding-left:450px;"><b>VAT Number: </b>
+                                    <span t-field="doc.company_id.partner_id.vat"/> 
+                                </td> -->
+                                <td style="padding-left:450px;"><b>Vehicle Reg.:</b>
+                                    <span t-field="doc.vehicle_reg"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:20px;">
+                                   <span t-field="doc.partner_id.city"/>
+                                </td> 
+                                <td style="padding-left:450px;"><b>Brand:</b>
+                                    <span t-field="doc.make_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:20px;">
+                                    <span t-field="doc.partner_id.zip"/>
+                                </td>
+                                <td style="padding-left:450px;"><b>Model:</b>
+                                    <span t-field="doc.model_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:20px;">
+                                    <span t-field="doc.partner_id.country_id.name"/>
+                                </td> 
+                                <td style="padding-left:450px;"><b>Sales Person: </b>
+                                    <span t-field="doc.user_id"/>
+                                </td>
+                            </tr>
+                       </table>
+                      <br/>
+                      <br/>
+                      <!-- Is there a discount on at least one line? -->
+                      <t t-set="display_discount" t-value="any([l.discount for l in doc.order_line])"/>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Unit Price</th>
+                                    <th t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">Discount</th>
+                                    <th class="text-center">VAT</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                           </thead>
+                           <tbody class="sale_tbody">
+                                <tr t-foreach="doc.order_line" t-as="l">
+                                    <td class="text-left col-xs-7">
+                                       <span t-field="l.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.product_uom_qty"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.price_unit"/>
+                                    </td>
+                                    <td t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_id))"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_subtotal"
+                                            t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+            
+                        <div class="row" name="total">
+                            <div class="col-xs-4 pull-right">
+                                <table class="table table-condensed">
+                                    <tr class="border-black">
+                                        <td><strong>Sub Total</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="doc.amount_untaxed"
+                                                t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>VAT</td>
+                                        <td class="text-right">
+                                            <span t-field="doc.amount_tax"
+                                                t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="doc.amount_total"
+                                                t-field-options='{"widget": "monetary", "display_currency": "doc.pricelist_id.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <p t-if="doc.company_id.bank_ids">
+                        <strong>Bank account details:<br/></strong>
+                        <t t-foreach="doc.company_id.bank_ids[0]" t-as="b">
+                              Account Name: <span t-field="b.bank_name"/> <br/>
+                              Sort Code: <span t-field="b.bank_bic"/>  | Account Number: <span t-field="b.acc_number"/><br/>
+                        </t>
+                        </p>
+                        <p t-if="doc.payment_term_id">
+                            <strong>Payment Term:</strong>
+                            <span t-field="doc.payment_term_id"/>
+                        </p>
+                        <p t-if="doc.fiscal_position_id">
+                            <strong>Fiscal Position:</strong>
+                            <span t-field="doc.fiscal_position_id"/>
+                        </p>
+                        <p>
+                             <span t-field="doc.note"/>
+                        </p>
+                        <p id="fiscal_position_remark" t-if="doc.fiscal_position_id and doc.fiscal_position_id.note">
+                            <strong>Fiscal Position Remark:</strong>
+                            <span t-field="doc.fiscal_position_id.note"/>
+                        </p>
+                        <br/><br/><br/><br/><br/>
+                        <p>
+                        <h5>Thank you for your business!<br/> <br/></h5>
+                        It is the customer's responsibility to check the wheel nuts for tightness after an initial 30 miles of motoring.<br/>
+                        All goods are sold subject to our standard terms and conditions (please see the reverse of this invoice). Goods will be released once full payment has been received.<br/>
+                        </p>
+                        <p style="page-break-after:always;">   </p>
+                        <p style="text-align: justify;font-size:10px" t-field="res_company.term_and_condition"></p>
+                         <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </t>
+</template>
+<template id="sale.report_saleorder">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="sale.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template> 
+
+       
+    </data>
+</openerp>

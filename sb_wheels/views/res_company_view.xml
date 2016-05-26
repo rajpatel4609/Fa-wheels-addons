@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="sb_wheel_res_company">
+            <field name="name">res.company</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="sale_stock.view_company_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='security_lead']" position="after">
+                        <field name="default_scrap_location_id"/>
+                        <field name="default_stock_location_id"/>
+                        <field name="default_cust_location_id"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="sb_wheel_res_company_t_n_c">
+            <field name="name">res.company</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//page[last()]" position="after">
+                        <page string = "Term And Condition">
+                            <field name="term_and_condition"/>
+                        </page>
+                    </xpath>
+                    <xpath expr="//page[1]" position="inside">
+                        <seperator string = "Bank Accounts"></seperator>
+                            <field name="bank_ids"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

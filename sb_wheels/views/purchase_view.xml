@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="sb_wheel_purchase">
+            <field name="name">product.order.form.sb.wheel</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//notebook/page/field[@name='order_line']/tree/field['product_id']" position="after">
+                        <field name="wheel_type" />
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</openerp>

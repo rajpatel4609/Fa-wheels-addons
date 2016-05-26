@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="sb_wheel_saleorder_tree">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="vehicle_reg"/>
+                    <field name="make_id"/>
+                    <field name="model_id"/>
+                    <field name="client_order_ref" string="Ref."/>
+                </xpath>
+            </data>
+        </field>
+        </record>
+
+    <record model="ir.ui.view" id="sb_wheels_sale_order_inherited">
+        <field name="name">sale.order.wheels</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+        <data>
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" name="view_joborders"
+                    type="object" icon="fa-flask">
+                    <field name="no_joborders" widget="statinfo" string="Job Orders" />
+                </button>
+            </div>
+            <xpath expr="//field[@name='incoterm']" position="after">
+                <field name="source"/>
+                <field name="source_note" attrs="{'invisible':[('source', '!=', 'others')]}"/>
+                <field name="method_of_delivery"/>
+                <field name="finishing"/>
+                <field name="description_website"/>
+            </xpath>
+            <xpath expr="//field[@name='pricelist_id']" position="attributes">
+                <attribute name="string">Price List</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount_tax']" position="attributes">
+                <attribute name="string">VAT</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
+                <attribute name="string">VAT</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form/group/group/field[@name='tax_id']" position="attributes">
+                <attribute name="string">VAT</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="vehicle_reg" placeholder="Enter Vehicle Number" help="User need to enter valid UK vehicle number, on that basis system will return Make and Model"/>
+                <field name="make_id"/>
+                <field name="model_id" domain="[('brand_id', '=', make_id)]" context="{'default_brand_id': make_id}"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="booking_date"/>
+                <field name="est_complete_date"/>
+                <field name="collection_date"/>
+            </xpath>
+            
+            <xpath expr="//button[@name='open_quotation']" position="before">
+                <button name="process_sale_order" string="Process Sale Order" type="object" class="oe_highlight" states="draft"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="replace"/>
+            <xpath expr="//field[@name='order_line']/form/group" position="before">
+                <separator string="Kind of Services"/>
+                <group>
+                    <group>
+                        <field name="sb_type"/>
+                    </group>
+                    <group>
+                        <field name="product_sale_type" attrs="{'invisible':[('sb_type','!=', 'wheel'),('sb_type','!=', 'tyre')]}"/>
+                        <field name="service_sale_type" attrs="{'invisible':[('sb_type','!=', 'services')]}" />
+                        <field name="by_filter" attrs="{'invisible':[('sb_type','!=', 'accessories')]}"/>
+                    </group>
+                </group>
+                <group>
+                    <group>
+                        <field name="product_id" groups="base.group_user" domain = "[('sb_type','=',sb_type)]"/>
+                    </group>
+                    <group>
+                        <field name="default_code"/>
+                        <field name="package_id"  attrs="{'invisible': [('service_sale_type','!=', 'repair')]}"/>
+                    </group>
+                </group>
+                <separator string="Vehicle Details" attrs="{'invisible':[('by_filter','=', False),]}"/>
+                <group col="6" attrs="{'invisible':[ ('by_filter','=', False)]}">
+                    <field name="vehicle_reg"/>
+                    <field name="make_id" widget="selection"/>
+                    <field name="model_id" domain="[('brand_id', '=', make_id)]" context="{'default_brand_id': make_id}" widget="selection" />
+                </group>
+                <field name="product_image" widget="image" class="oe_avatar"/>
+                <div class="oe_title">
+                    <field name="name" default_focus="1" placeholder="Product Details"/>
+                </div>
+                <group col="2">
+                    <field name="spare_wheel" />
+                </group>
+                <group col="8">
+                    <field name="left_front" /> 
+                    <field name="right_front" /> 
+                    <field name="left_back" /> 
+                    <field name="right_back" /> 
+                </group>
+                <separator string="Wheel Attributes"/>
+                <group col="6">
+                    <field name="wheel_width"/>
+                    <field name="wheel_height"/>
+                    <field name="wheel_speed"/>
+                    <field name="wheel_diameter"/>
+                    <field name="wheel_offset"/>
+                    <field name="wheel_pcd"/>
+                    <field name="wheel_color"/>
+                </group>
+                <group col="6" attrs="{'invisible':[ ('by_filter','=', False),]}">
+                    <field name="size_id" widget="selection"/>
+                    <field name="style_id" attrs="{'invisible': [('model_id', '=', False)]}" domain="[('model_id', '=', model_id)]" />
+                    <field name="type_id" attrs="{'invisible': [('model_id', '=', False)]}" domain="[('model_id', '=', model_id)]" />
+                </group>
+                </xpath>
+             <xpath expr="//field[@name='product_uom_qty']" position="attributes">
+                <attribute name="context">{ 
+                                            'wheel_left_front': left_front,
+                                            'wheel_right_front': right_front,
+                                            'wheel_left_back': left_back,
+                                            'wheel_right_back': right_back,
+                                            'wheel_sb_type': sb_type,
+                                            'wheel_product_sale_type': product_sale_type,
+                                            'wheel_service_sale_type': service_sale_type,
+                                            'wheel_spare_wheel': spare_wheel,
+                                            'wheel_package_id': package_id,
+                                            }</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='order_line']/form/field[@name='name']" position="after">
+                <notebook>
+                    <page string="Description" invisible="1">
+                    </page>
+                    <page string="Invoice Lines" invisible="1">
+                        <field name="invoice_lines"/>
+                    </page>
+                </notebook>
+            </xpath>
+            
+             <xpath expr="//notebook[last()]" position="inside">
+                    <page string="Notes"  >
+                        <field name="note_ids"/>
+                    </page>
+                    <page string="Inspection">
+                        <field name="inspection_ids"/>
+                    </page>
+                    <page string="ReStock Items">
+                        <field name="restock_ids"/>
+                    </page>
+                    <page string="Refurb/Repair">
+                        <field name="wheel_tag_ids"/>`
+                    </page>
+                    <page string="Images">
+                        <field name="onsite_image_ids"/>
+                    </page>
+                    <page string="Exchange">
+                        <field name="exchange_their_image_ids"/>
+                    </page>
+                     
+            </xpath>
+            
+            <xpath expr="//field[@name='order_line']/form/label[@for='name']" position="replace"/>
+            <xpath expr="//field[@name='order_line']/form/field[@name='name']" position="replace"/>
+            <xpath expr="//field[@name='order_line']/form/div/label[@for='invoice_lines']" position="replace"/>
+            <xpath expr="//field[@name='order_line']/form/div/field[@name='invoice_lines']" position="replace"/>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="context">{'default_vehicle_reg': vehicle_reg,'default_make_id': make_id,'default_model_id': model_id}</attribute>
+            </xpath>
+            
+        </data>
+        </field>
+    </record>
+    
+
+    <record model="ir.ui.view" id="sale_order_form_quote_entend">
+        <field name="name">sale.order.sb.website_quote.extend</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="website_quote.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='template_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </data>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="sb_crm_sale_order_form_inherit">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_crm.sale_view_inherit123"/>
+        <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='source_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='medium_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='campaign_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </data>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="sb_wheel_sale_order_search">
+        <field name="name">sale.order.search.sb.wheel</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="vehicle_reg"/>
+            </xpath>
+            <xpath expr="//group[last()]" position="inside">
+                 <filter string="Vehicle" domain="[]" context="{'group_by':'vehicle_reg'}"/>
+                 <filter string="Make" domain="[]" context="{'group_by':'make_id'}"/>
+                 <filter string="Model" domain="[]" context="{'group_by':'model_id'}"/>
+            </xpath>
+        </field>
+    </record>
+    </data>
+</openerp>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_product_template_form_multiple_image">
+        <field name="name">product.template.form.view.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="website_style_ids" position="after">
+                <field name="is_features"/>
+                <field name="is_arrival"/>
+            </field>
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page string="Website Information">
+                    <group string="Warranty">
+                        <field name="show_warranty"/>
+                        <field name="warranty_details" attrs="{'invisible': [('show_warranty','=',False)]}"/>
+                    </group>
+                    <group string="Description">
+                        <field name="show_description_tab"/>
+                        <field name="website_description" attrs="{'invisible': [('show_description_tab','=',False)]}"/>
+                    </group>
+                    <group string="Terms and Conditions">
+                        <field name="show_terms_and_conditions"/>
+                        <field name="terms_and_conditions_details" attrs="{'invisible': [('show_terms_and_conditions','=',False)]}"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for sale.order -->
+        <!-- <record id="seq_type_joborder" model="ir.sequence.type">
+            <field name="name">Job Card</field>
+            <field name="code">JBO</field>
+        </record> -->
+
+        <record id="seq_job_joborder" model="ir.sequence">
+            <field name="name">Job Card</field>
+            <field name="code">JBO</field>
+            <field name="prefix">JC</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for product.product -->
+        <!-- <record id="seq_type_product" model="ir.sequence.type">
+            <field name="name">Product Product</field>
+            <field name="code">sb.product.product</field>
+        </record> -->
+
+        <record id="seq_product" model="ir.sequence">
+            <field name="name">Product Product</field>
+            <field name="code">sb.product.product</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>
+

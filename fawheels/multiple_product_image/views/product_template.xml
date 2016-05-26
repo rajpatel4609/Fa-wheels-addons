@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Inherit template for Add multiple images in product details page & zooming featue -->
+        <template id="website_multiple_image_product_slider" inherit_id="website_sale.product" name="Website Multi-Image  Product" customize_show="True">
+            <xpath expr="//section[@id='product_detail']//span[@itemprop='image']" position="replace">
+                <span itemprop="image">
+                    <t t-if="website and not website.is_zoom_feature">
+                        <div class="product-zoom-image">
+                            <img id="zoom_01" t-att-src="website.image_url(product, 'image')" t-att-data-zoom-image="website.image_url(product, 'image')" class="product_detail_img custom-zoom-view" />
+                        </div>
+                        <style type="text/css">
+                    #product_detail .col-sm-7 {position: inherit;}
+                    .custom-zoom-view{max-width:500px;}
+                    </style>
+                    </t>
+                    <t t-if="website and website.is_zoom_feature">
+                        <div class="product-image">
+                            <img id="thumb" t-att-src="website.image_url(product, 'image')" class="img img-responsive product_detail_img" t-att-alt="product.name" t-att-title="product.name" />
+                        </div>
+                    </t>
+                    <t t-if="website.get_multiple_images(product.id) and product.multi_image">
+                        <div class="owl-carousel" id="thumb-slider">
+                            <div class="item">
+                                <span itemprop="image">
+                                    <img t-att-src="website.image_url(product, 'image')" class="product_main_multi_img" t-att-alt="product.name" t-att-title="product.name" />
+                                </span>
+                            </div>
+                            <t t-foreach="website.get_multiple_images(product.id)" t-as="im">
+                                <div class="item">
+                                    <span itemprop="image">
+                                        <img t-att-src="website.image_url(im, 'image')" class="product_multi_img" t-att-alt="im.name" t-att-title="im.name" />
+                                    </span>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </span>
+            </xpath>
+        </template>
+    </data>
+</openerp>

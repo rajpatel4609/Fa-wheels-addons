@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- Sale job order state data -->
+        <record id="sale_job_order_state_1" model="sale.job.order.state">
+            <field name="sequence">1</field>
+            <field name="name">Draft</field>
+            <field name="fold">False</field>
+        </record>
+        <record id="sale_job_order_state_2" model="sale.job.order.state">
+            <field name="sequence">2</field>
+            <field name="name">Work In Progess</field>
+            <field name="fold">False</field>
+        </record>
+        <record id="sale_job_order_state_3" model="sale.job.order.state">
+            <field name="sequence">3</field>
+            <field name="name">Ready To Delivery</field>
+            <field name="fold">False</field>
+        </record>
+        <record id="sale_job_order_state_4" model="sale.job.order.state">
+            <field name="sequence">4</field>
+            <field name="name">Job Done</field>
+            <field name="fold">True</field>
+            
+        </record>
+        <record id="sale_job_order_state_5" model="sale.job.order.state">
+            <field name="sequence">5</field>
+            <field name="name">Job Cancel</field>
+            <field name="fold">True</field>
+        </record>
+    </data>
+</openerp>
